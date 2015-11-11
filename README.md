@@ -1,2 +1,2 @@
-# Forum screen
-Information screen with public transport-, traffic-, and floor information for the Forum building.
+# Mapper
+Application to make simple animations and arrange media.
