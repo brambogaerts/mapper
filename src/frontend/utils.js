@@ -10,7 +10,8 @@ Number.prototype.map = function (in_min, in_max, out_min, out_max) {
 
 var Utils = module.exports = {
 	sliderPxToTime: function(x) {
-		return x.map(globals.limit.left, globals.limit.right, 0, 1);
+		var time = x.map(globals.limit.left, globals.limit.right, 0, 1);
+		return Math.round(time*100)/100;
 	},
 	
 	timeToSliderPx: function(time) {
@@ -22,6 +23,56 @@ var Utils = module.exports = {
 		$('.indicator').css({ 
 			left: Utils.timeToSliderPx(time)
 		});
+
+		Utils.updateControls();
+		Utils.updateObjects();
+	},
+
+	updateObjects: function() {
+		var change = false;
+		if (!globals.currentKeyframe) {
+			globals.currentKeyframe = Utils.getCurrentKeyframe();
+			change = true;
+		} else {
+			var times = globals.keyframeTimes;
+			var cur = _.indexOf(times, globals.currentKeyframe.time);
+			var next = cur + 1;
+
+			var nextTime = times[next];
+			if (globals.currentTime >= nextTime) {
+				globals.currentKeyframe = Utils.getCurrentKeyframe();
+				change = true;
+			} else if (globals.currentTime <= globals.currentKeyframe.time) {
+				globals.currentKeyframe = Utils.getCurrentKeyframe();
+				change = true;
+			}
+		}
+
+		if (change) {
+			var k = globals.currentKeyframe;
+			$('.keyframe').removeClass('active');
+			$('.keyframe[data-time="'+k.time+'"]').addClass('active');
+
+			$('input[type="checkbox"]').prop('checked', false);
+			_.each(k.activeNodes, function(n) {
+				$('input[data-id="' + n + '"]').prop('checked', true);
+			});
+		}
+	},
+
+	updateControls: function() {
+		var k = Utils.getKeyframeByTime(globals.currentTime);
+		if (k) { // there's a keyframe on this specific time
+			$('.controls .remove-keyframe').addClass('active');
+			$('.controls .add-keyframe').removeClass('active');
+		} else {
+			$('.controls .add-keyframe').addClass('active');
+			$('.controls .remove-keyframe').removeClass('active');
+		}
+	},
+
+	getKeyframeTimes: function() {
+		return _.pluck(user.keyframes, 'time').sort();
 	},
 
 	getKeyframeByTime: function(time) {
@@ -58,7 +109,7 @@ var Utils = module.exports = {
 			return k;
 		} else {
 			var t = globals.currentTime;
-			var times = _.pluck(user.keyframes, 'time');
+			var times = Utils.getKeyframeTimes();
 			times.push(t);
 			times.sort();
 

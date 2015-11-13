@@ -12,8 +12,6 @@ function init() {
 		globals.limit.left = offset.left;
 		globals.limit.right = globals.limit.left + $('.slider').width();
 	}
-
-	console.log(globals);
 }
 
 $(function() {

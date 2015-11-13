@@ -25,26 +25,46 @@ var Interface = module.exports = {
 		});
 
 		$('.timeline').on('click', '.add-keyframe', Interface.addKeyframe);
+		$('.timeline').on('click', '.remove-keyframe', Interface.removeKeyframe);
 		$('.timeline').on('click', '.next-keyframe', Interface.gotoNextKeyframe);
 		$('.timeline').on('click', '.prev-keyframe', Interface.gotoPrevKeyframe);
+
+		$('.list span.toggle-images').click(function() {
+			$(this).parent().toggleClass('expanded');
+		});
 	},
 
 	addKeyframe: function() {
-		var keyframe = {
-			time: globals.currentTime
-		};
+		if ($(this).hasClass('active')) {
+			var keyframe = {
+				time: globals.currentTime
+			};
 
-		user.keyframes.push(keyframe);
-		var idx = user.keyframes.length - 1;
+			user.keyframes.push(keyframe);
+			var idx = user.keyframes.length - 1;
 
-		var $div = $('<div class="keyframe" data-time="' + keyframe.time + '"/>');
-		$div.css({
-			left: utils.timeToSliderPx(keyframe.time)
-		});
+			var $div = $('<div class="keyframe" data-time="' + keyframe.time + '"/>');
+			$div.css({
+				left: utils.timeToSliderPx(keyframe.time)
+			});
 
-		$('.slider').append($div);
+			$('.slider').append($div);
 
-		user.keyframes = _.sortBy(user.keyframes, 'time');
+			user.keyframes = _.sortBy(user.keyframes, 'time');
+			globals.keyframeTimes = utils.getKeyframeTimes();
+		}
+	},
+
+	removeKeyframe: function() {
+		if ($(this).hasClass('active')) {
+			var k = utils.getCurrentKeyframe();
+			if (k) {
+				console.log(user.keyframes, k);
+				console.log(user.keyframes.length);
+				//user.keyframes = _.remove(user.keyframes, k);
+				console.log(user.keyframes.length);
+			}
+		}
 	},
 
 	gotoNextKeyframe: function() {
