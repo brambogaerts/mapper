@@ -241,24 +241,34 @@ function findGroup(id, callback){
 	}
 }
 
+
 function saveUser(data, group, id, callback){
 	findUser(group, id, function(user){
-		var contents = JSON.stringify(data);
-		var underscoreName = user.name.replace(" ", "_");
+		try {
+			var contents = JSON.stringify(data);
+			var underscoreName = user.name.replace(" ", "_");
 
-		fs.writeFile(config.dataPath + group + "/" + underscoreName + "/" + "data.json", contents, function(err){
-			if(err){
-				callback({
-					status: 400,
-					error: err
-				});
-			} else {
-				callback({
-					status: 200,
-					error: null
+			if(contents.charAt(0) == "{" && contents.charAt(contents.length-1) == "}"){
+				fs.writeFile(config.dataPath + group + "/" + underscoreName + "/" + "data.json", contents, function(err){
+					if(err){
+						callback({
+							status: 400,
+							error: err
+						});
+					} else {
+						callback({
+							status: 200,
+							error: null
+						});
+					}
 				});
 			}
-		});
+		} catch(e){
+			callback({
+				status:200,
+				error: e
+			})
+		}
 	});
 }
 

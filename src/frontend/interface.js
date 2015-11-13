@@ -29,6 +29,13 @@ var Interface = module.exports = {
 		$('.timeline').on('click', '.next-keyframe', Interface.gotoNextKeyframe);
 		$('.timeline').on('click', '.prev-keyframe', Interface.gotoPrevKeyframe);
 		$('.timeline').on('click', '.ion-play', Interface.play);
+		$(document).on("keyup", function(event){
+			if(event.which == 187){
+				Interface.forceShow(true);
+			} else {
+				Interface.forceShow(false);
+			}
+		});
 
 		$('.list span.toggle-images').click(function() {
 			$(this).parent().toggleClass('expanded');
@@ -110,6 +117,15 @@ var Interface = module.exports = {
 			});
 		});
 	},
+	forceShow:function(force){
+		if(force){
+			$(".node").addClass("force-show");
+			$("body").addClass("force-show");
+		} else {
+			$(".node").removeClass("force-show");
+			$("body").removeClass("force-show");
+		}
+	},
 	dragNode:function(event, dd){
 		Interface.moveNode(this, dd.offsetX, dd.offsetY);
 	},
@@ -130,9 +146,10 @@ var Interface = module.exports = {
 
 		if(_y < 0){
 			_y = 0;
-		} else if(_y > ele.parent().width()){
-			_y = ele.parent().width();
+		} else if(_y > ele.parent().height()){
+			_y = ele.parent().height();
 		}
+
 
 		var x = _x / ele.parent().width();
 		var y = _y / ele.parent().height();

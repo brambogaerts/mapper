@@ -261,19 +261,32 @@ input, label {
 	}
 }
 
+body.force-show {
+	background: green;
+}
+
 .node {
 	position: absolute;
 	left:50%;
 	top:50%;
 	width: 50px;
 	height: 50px;
-	background: red;
 	margin-left: -25px;
 	margin-top:-25px;
 	opacity: .5;
+	-webkit-transition: opacity 500ms ease;
+	background-size: contain;
+	background-position: center;
+	background-repeat:no-repeat;
+	pointer-events: none;
 
 	&.active {
 		opacity: 1;
 		z-index: 999;
+		pointer-events: auto;
+	}
+
+	&.force-show {
+		opacity: 1;
 	}
 }
