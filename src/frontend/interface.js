@@ -29,6 +29,7 @@ var Interface = module.exports = {
 		$('.timeline').on('click', '.next-keyframe', Interface.gotoNextKeyframe);
 		$('.timeline').on('click', '.prev-keyframe', Interface.gotoPrevKeyframe);
 		$('.timeline').on('click', '.ion-play', Interface.play);
+		$('.timeline').on('click', '.ion-pause', Interface.stop);
 
 		$('.list span.toggle-images').click(function() {
 			$(this).parent().toggleClass('expanded');
@@ -38,13 +39,25 @@ var Interface = module.exports = {
 	},
 
 	play: function() {
+		Interface.forceShow(false);
+
 		globals.interval = setInterval(function() {
+			$('body').addClass('playing');
 			var totalTime = globals.duration;
 			var t = globals.currentTime * totalTime;
 
 			var next = t + 1;
+			if (next >= totalTime) {
+				Interface.stop();
+			}
 			utils.setTimelineTime(next/totalTime);
 		}, 1);
+	},
+
+	stop: function() {
+		$('body').removeClass('playing');
+		clearInterval(globals.interval);
+
 	},
 
 	imageClicked: function(){
