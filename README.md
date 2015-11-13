@@ -85,21 +85,21 @@ response:
             }]
         }],
         "keyframes": [{
-            "position": 0,
+            "time": 0,
             "activeNodes": [
                 "272dcd30dd68beb47d42376605d9b8fe",
                 "272dcd30dd68beb47d42376605d9b8fe",
                 "272dcd30dd68beb47d42376605d9b8fe"
             ]
         }, {
-            "position": 0.5,
+            "time": 0.5,
             "activeNodes": [
                 "272dcd30dd68beb47d42376605d9b8fe",
                 "272dcd30dd68beb47d42376605d9b8fe",
                 "272dcd30dd68beb47d42376605d9b8fe"
             ]
         }, {
-            "position": 1,
+            "time": 1,
             "activeNodes": [
                 "272dcd30dd68beb47d42376605d9b8fe",
                 "272dcd30dd68beb47d42376605d9b8fe",

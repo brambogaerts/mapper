@@ -2,10 +2,10 @@
 
 <div class="user-selector">
 	<div class="users">
-		<h2>{{group.name}}</h2>
-		{{#each group.students}}
-			<div class="user" data-slug="{{slug}}">
-				{{first_name}} {{last_name}}
+		<h2>Groep {{group.number}}</h2>
+		{{#each group.users}}
+			<div class="user" data-slug="{{id}}">
+				{{name}}
 			</div>
 		{{/each}}
 	</div>
