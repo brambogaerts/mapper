@@ -80,22 +80,25 @@ var Interface = module.exports = {
 
 	removeKeyframe: function() {
 		if ($(this).hasClass('active')) {
-			var k = utils.getCurrentKeyframe();
-			if (k) {
-				$('.keyframe[data-time="' + k.time + '"]').remove();
-				_.remove(user.keyframes, {
-					time: k.time
-				});
+			var yes = confirm('Weet je het zeker?');
+			if (yes) {
+				var k = utils.getCurrentKeyframe();
+				if (k) {
+					$('.keyframe[data-time="' + k.time + '"]').remove();
+					_.remove(user.keyframes, {
+						time: k.time
+					});
+				}
+
+				utils.save();
+
+				var prev = utils.getPrevKeyframe();
+				if (prev === false) {
+					$('input.image-checkbox').prop('checked', false);
+				}
+
+				utils.setTimelineTime(globals.currentTime);
 			}
-
-			utils.save();
-
-			var prev = utils.getPrevKeyframe();
-			if (prev === false) {
-				$('input.image-checkbox').prop('checked', false);
-			}
-
-			utils.setTimelineTime(globals.currentTime);
 		}
 	},
 
