@@ -241,6 +241,27 @@ function findGroup(id, callback){
 	}
 }
 
+function saveUser(data, group, id, callback){
+	findUser(group, id, function(user){
+		var contents = JSON.stringify(data);
+		var underscoreName = user.name.replace(" ", "_");
+
+		fs.writeFile(config.dataPath + group + "/" + underscoreName + "/" + "data.json", contents, function(err){
+			if(err){
+				callback({
+					status: 400,
+					error: err
+				});
+			} else {
+				callback({
+					status: 200,
+					error: null
+				});
+			}
+		});
+	});
+}
+
 function findUser(group, id, callback){
 	findGroup(group, function(group){
 		if(group == null){
@@ -250,7 +271,20 @@ function findUser(group, id, callback){
 
 			group.users.forEach(function(user){
 				if(user.id == id){
-					callback(user);
+					var underscoreName = user.name.replace(" ", "_");
+
+					fs.readFile(config.dataPath + group.number + "/" + underscoreName + "/" + "data.json", function(err, file){
+						if(err){
+							callback(user);
+						} else {
+							var json = JSON.parse(file);
+
+							user.objects = json.objects;
+							user.keyframes = json.keyframes;
+							callback(user);
+						}
+					});
+
 					done = true;
 				}
 			});
@@ -266,5 +300,6 @@ function findUser(group, id, callback){
 module.exports = {
 	findGroups: findGroups,
 	findGroup: findGroup,
-	findUser: findUser
+	findUser: findUser,
+	saveUser: saveUser
 };
