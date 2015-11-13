@@ -105,6 +105,13 @@ h4 {
 	float: right;
 	padding-top: 25px;
 	height: 100%;
+	pointer-events: none;
+	opacity: 0.3;
+
+	&.enabled {
+		pointer-events: auto;
+		opacity: 1;
+	}
 
 	ul {
 		margin-top: 10px;

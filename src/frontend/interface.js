@@ -36,8 +36,11 @@ var Interface = module.exports = {
 
 	addKeyframe: function() {
 		if ($(this).hasClass('active')) {
+			var current = utils.getCurrentKeyframe();
+
 			var keyframe = {
-				time: globals.currentTime
+				time: globals.currentTime,
+				activeNodes: (current) ? current.activeNodes : []
 			};
 
 			user.keyframes.push(keyframe);
@@ -52,6 +55,10 @@ var Interface = module.exports = {
 
 			user.keyframes = _.sortBy(user.keyframes, 'time');
 			globals.keyframeTimes = utils.getKeyframeTimes();
+
+			utils.setTimelineTime(globals.currentTime);
+
+			utils.save();
 		}
 	},
 
@@ -64,6 +71,10 @@ var Interface = module.exports = {
 				//user.keyframes = _.remove(user.keyframes, k);
 				console.log(user.keyframes.length);
 			}
+
+			utils.setTimelineTime(globals.currentTime);
+
+			utils.save();
 		}
 	},
 

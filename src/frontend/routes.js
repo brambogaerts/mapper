@@ -23,17 +23,21 @@ function chooseUser(ctx) {
 }
 
 function showInterface(ctx) {
-	user.keyframes.forEach(function(obj, idx) {
-		$div = $('<div class="keyframe" data-time="' + obj.time + '"/>');
-		$div.css({
-			left: utils.timeToSliderPx(obj.time)
-		});
+	if (user.keyframes) {
+		user.keyframes.forEach(function(obj, idx) {
+			$div = $('<div class="keyframe" data-time="' + obj.time + '"/>');
+			$div.css({
+				left: utils.timeToSliderPx(obj.time)
+			});
 
-		$('.slider').append($div);
-	});
+			$('.slider').append($div);
+		});
+	} else {
+		user.keyframes = [];
+	}
+
+	globals.keyframeTimes = utils.getKeyframeTimes();
 
 	Interface.initEvents();
-	utils.updateControls();
-	
-	globals.keyframeTimes = utils.getKeyframeTimes();
+	utils.setTimelineTime(0);
 }
