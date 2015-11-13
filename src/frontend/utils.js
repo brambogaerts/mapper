@@ -26,7 +26,7 @@ var Utils = module.exports = {
 					alert(resp.error);
 				}
 			}
-		})
+		});
 	},
 
 	sliderPxToTime: function(x) {
@@ -48,11 +48,15 @@ var Utils = module.exports = {
 		Utils.updateObjects();
 	},
 
+	setCurrentKeyFrame: function(keyframe) {
+		globals.currentKeyframe = keyframe;
+	},
+
 	updateObjects: function() {
 		if (user.keyframes.length > 0) {
 			var change = false;
 			if (!globals.currentKeyframe) {
-				globals.currentKeyframe = Utils.getCurrentKeyframe();
+				Utils.setCurrentKeyFrame(Utils.getCurrentKeyframe());
 				change = true;
 			} else {
 				var times = globals.keyframeTimes;
@@ -61,23 +65,27 @@ var Utils = module.exports = {
 
 				var nextTime = times[next];
 				if (globals.currentTime >= nextTime) {
-					globals.currentKeyframe = Utils.getCurrentKeyframe();
+					Utils.setCurrentKeyFrame(Utils.getCurrentKeyframe());
 					change = true;
 				} else if (globals.currentTime <= globals.currentKeyframe.time) {
-					globals.currentKeyframe = Utils.getCurrentKeyframe();
+					Utils.setCurrentKeyFrame(Utils.getCurrentKeyframe());
 					change = true;
 				}
 			}
 
 			if (change) {
 				var k = globals.currentKeyframe;
-				$('.keyframe').removeClass('active');
-				$('.keyframe[data-time="'+k.time+'"]').addClass('active');
+				if (k) {
+					$('.keyframe').removeClass('active');
+					$('.keyframe[data-time="'+k.time+'"]').addClass('active');
 
-				$('input[type="checkbox"]').prop('checked', false);
-				_.each(k.activeNodes, function(n) {
-					$('input[data-id="' + n + '"]').prop('checked', true);
-				});
+					$('input[type="checkbox"]').prop('checked', false);
+					$('.node').removeClass('active');
+					_.each(k.activeNodes, function(n) {
+						$('input[data-id="' + n + '"]').prop('checked', true);
+						$('#node' + n).addClass('active');
+					});
+				}
 			}
 		}
 	},
@@ -97,6 +105,20 @@ var Utils = module.exports = {
 		}
 	},
 
+	addImageToKeyframe: function(id) {
+		var k = Utils.getCurrentKeyframe();
+		if (k) {
+			k.activeNodes.push(id);
+		}
+	},
+
+	removeImageFromKeyframe: function(id) {
+		var k = Utils.getCurrentKeyframe();
+		if (k) {
+			k.activeNodes = _.without(k.activeNodes, id);
+		}
+	},
+
 	getKeyframeTimes: function() {
 		return _.pluck(user.keyframes, 'time').sort();
 	},
@@ -108,11 +130,15 @@ var Utils = module.exports = {
 	getPrevKeyframe: function() {
 		var k = Utils.getCurrentKeyframe();
 
-		var prevIdx = _.indexOf(user.keyframes, k);
-		if (k.time === globals.currentTime) prevIdx--;
+		if (k) {
+			var prevIdx = _.indexOf(user.keyframes, k);
+			if (k.time === globals.currentTime) prevIdx--;
 
-		if (prevIdx >= 0) {
-			return user.keyframes[prevIdx];
+			if (prevIdx >= 0) {
+				return user.keyframes[prevIdx];
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}

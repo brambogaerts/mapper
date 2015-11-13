@@ -28,6 +28,7 @@ var Interface = module.exports = {
 		$('.timeline').on('click', '.remove-keyframe', Interface.removeKeyframe);
 		$('.timeline').on('click', '.next-keyframe', Interface.gotoNextKeyframe);
 		$('.timeline').on('click', '.prev-keyframe', Interface.gotoPrevKeyframe);
+		$('.timeline').on('click', '.ion-play', Interface.play);
 
 		$('.list span.toggle-images').click(function() {
 			$(this).parent().toggleClass('expanded');
@@ -39,7 +40,25 @@ var Interface = module.exports = {
 		});
 	},
 
+	play: function() {
+		globals.interval = setInterval(function() {
+			var totalTime = globals.duration;
+			var t = globals.currentTime * totalTime;
+
+			var next = t + 1;
+			utils.setTimelineTime(next/totalTime);
+		}, 1);
+	},
+
 	imageClicked: function(){
+		var checked = $(this).prop('checked');
+
+		if (checked) {
+			utils.addImageToKeyframe($(this).data('id'));
+		} else {
+			utils.removeImageFromKeyframe($(this).data('id'));
+		}
+
 		var clicked = this;
 
 		var image = $("#node" + clicked.dataset.id);
@@ -144,7 +163,7 @@ var Interface = module.exports = {
 
 			var keyframe = {
 				time: globals.currentTime,
-				activeNodes: (current) ? current.activeNodes : []
+				activeNodes: (current) ?  _.cloneDeep(current.activeNodes) : []
 			};
 
 			user.keyframes.push(keyframe);
@@ -168,17 +187,25 @@ var Interface = module.exports = {
 
 	removeKeyframe: function() {
 		if ($(this).hasClass('active')) {
-			var k = utils.getCurrentKeyframe();
-			if (k) {
-				$('.keyframe[data-time="' + k.time + '"]').remove();
-				_.remove(user.keyframes, {
-					time: k.time
-				});
+			var yes = confirm('Weet je het zeker?');
+			if (yes) {
+				var k = utils.getCurrentKeyframe();
+				if (k) {
+					$('.keyframe[data-time="' + k.time + '"]').remove();
+					_.remove(user.keyframes, {
+						time: k.time
+					});
+				}
+
+				utils.save();
+
+				var prev = utils.getPrevKeyframe();
+				if (prev === false) {
+					$('input.image-checkbox').prop('checked', false);
+				}
+
+				utils.setTimelineTime(globals.currentTime);
 			}
-
-			utils.setTimelineTime(globals.currentTime);
-
-			utils.save();
 		}
 	},
 
