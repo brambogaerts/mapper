@@ -72,10 +72,10 @@ var Interface = module.exports = {
 		if ($(this).hasClass('active')) {
 			var k = utils.getCurrentKeyframe();
 			if (k) {
-				console.log(user.keyframes, k);
-				console.log(user.keyframes.length);
-				//user.keyframes = _.remove(user.keyframes, k);
-				console.log(user.keyframes.length);
+				$('.keyframe[data-time="' + k.time + '"]').remove();
+				_.remove(user.keyframes, {
+					time: k.time
+				});
 			}
 
 			utils.setTimelineTime(globals.currentTime);
