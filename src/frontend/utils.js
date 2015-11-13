@@ -26,7 +26,7 @@ var Utils = module.exports = {
 					alert(resp.error);
 				}
 			}
-		})
+		});
 	},
 
 	sliderPxToTime: function(x) {
@@ -48,11 +48,15 @@ var Utils = module.exports = {
 		Utils.updateObjects();
 	},
 
+	setCurrentKeyFrame: function(keyframe) {
+		globals.currentKeyframe = keyframe;
+	},
+
 	updateObjects: function() {
 		if (user.keyframes.length > 0) {
 			var change = false;
 			if (!globals.currentKeyframe) {
-				globals.currentKeyframe = Utils.getCurrentKeyframe();
+				Utils.setCurrentKeyFrame(Utils.getCurrentKeyframe());
 				change = true;
 			} else {
 				var times = globals.keyframeTimes;
@@ -61,10 +65,10 @@ var Utils = module.exports = {
 
 				var nextTime = times[next];
 				if (globals.currentTime >= nextTime) {
-					globals.currentKeyframe = Utils.getCurrentKeyframe();
+					Utils.setCurrentKeyFrame(Utils.getCurrentKeyframe());
 					change = true;
 				} else if (globals.currentTime <= globals.currentKeyframe.time) {
-					globals.currentKeyframe = Utils.getCurrentKeyframe();
+					Utils.setCurrentKeyFrame(Utils.getCurrentKeyframe());
 					change = true;
 				}
 			}
@@ -110,7 +114,6 @@ var Utils = module.exports = {
 		var k = Utils.getCurrentKeyframe();
 		if (k) {
 			k.activeNodes = _.without(k.activeNodes, id);
-			console.log(id, k.activeNodes)
 		}
 	},
 

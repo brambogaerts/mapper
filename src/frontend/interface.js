@@ -37,8 +37,6 @@ var Interface = module.exports = {
 	},
 
 	imageClicked: function(){
-		console.log(this);
-
 		var checked = $(this).prop('checked');
 
 		if (checked) {
@@ -56,7 +54,7 @@ var Interface = module.exports = {
 
 			var keyframe = {
 				time: globals.currentTime,
-				activeNodes: (current) ? current.activeNodes : []
+				activeNodes: (current) ?  _.cloneDeep(current.activeNodes) : []
 			};
 
 			user.keyframes.push(keyframe);
