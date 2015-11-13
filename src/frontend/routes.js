@@ -3,6 +3,7 @@ var page = require('page');
 
 var utils = require('./utils');
 var Interface = require('./interface');
+var globals = require('./globals');
 
 page('/', chooseGroup);
 page('/groep/:id', chooseUser);
@@ -32,4 +33,7 @@ function showInterface(ctx) {
 	});
 
 	Interface.initEvents();
+	utils.updateControls();
+	
+	globals.keyframeTimes = utils.getKeyframeTimes();
 }

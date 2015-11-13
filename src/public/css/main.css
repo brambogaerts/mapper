@@ -3156,15 +3156,35 @@ h4 {
   height: 100%; }
   .list ul {
     margin-top: 10px;
-    margin-bottom: 15px; }
+    margin-bottom: 15px;
+    border-top: 2px solid white;
+    border-left: 2px solid white; }
+    .list ul .ion-arrow-down-b {
+      display: none; }
     .list ul li {
       font-weight: bold;
-      line-height: 1.5em; }
+      line-height: 2em;
+      border-bottom: 2px solid white; }
+      .list ul li.expanded ul {
+        display: block; }
+      .list ul li.expanded .ion-arrow-down-b {
+        display: inline; }
+      .list ul li.expanded .ion-arrow-right-b {
+        display: none; }
       .list ul li ul {
-        margin-top: 0; }
+        margin-top: 0;
+        border: none;
+        border-top: 2px solid white;
+        padding-top: 7px;
+        display: none; }
         .list ul li ul li {
           font-weight: normal;
-          margin-left: 1em; }
+          padding-left: 2em;
+          border: none; }
+  .list .toggle-images {
+    padding-left: 1em;
+    display: block;
+    cursor: pointer; }
 
 input, label {
   cursor: pointer; }
@@ -3201,6 +3221,8 @@ input, label {
       border-radius: 5px;
       top: -3px;
       margin-left: -5px; }
+      .timeline .slider .keyframe.active {
+        background: green; }
       .timeline .slider .keyframe:hover {
         background: red;
         transform: scale(1.3); }
@@ -3208,7 +3230,7 @@ input, label {
     text-align: center;
     margin-top: 20px;
     font-size: 1.2em; }
-    .timeline .controls .add-keyframe {
+    .timeline .controls .add-keyframe, .timeline .controls .remove-keyframe {
       text-transform: uppercase;
       border: 1px solid white;
       font-size: 0.5em;
@@ -3216,10 +3238,13 @@ input, label {
       position: relative;
       top: -3px;
       margin-left: 20px;
-      cursor: pointer; }
-      .timeline .controls .add-keyframe:hover {
-        border-color: #999;
-        color: #999; }
+      cursor: pointer;
+      opacity: 0.5; }
+      .timeline .controls .add-keyframe.active, .timeline .controls .remove-keyframe.active {
+        opacity: 1; }
+        .timeline .controls .add-keyframe.active:hover, .timeline .controls .remove-keyframe.active:hover {
+          border-color: #999;
+          color: #999; }
     .timeline .controls .icon {
       margin-right: 4px;
       margin-left: 4px; }

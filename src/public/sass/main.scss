@@ -109,20 +109,52 @@ h4 {
 	ul {
 		margin-top: 10px;
 		margin-bottom: 15px;
-		
+		border-top: 2px solid white;
+		border-left: 2px solid white;
+
+		.ion-arrow-down-b {
+			display: none;
+		}
+
 		li {
 			font-weight: bold;
-			line-height: 1.5em;
+			line-height: 2em;
+			border-bottom: 2px solid white;
+
+			&.expanded {
+				ul {
+					display: block;
+				}
+
+				.ion-arrow-down-b {
+					display: inline;
+				}
+
+				.ion-arrow-right-b {
+					display: none;
+				}
+			}
 
 			ul {
 				margin-top: 0;
+				border: none;
+				border-top: 2px solid white;
+				padding-top: 7px;
+				display: none;
 
 				li {
 					font-weight: normal;
-					margin-left: 1em;
+					padding-left: 2em;
+					border: none;
 				}
 			}
 		}
+	}
+
+	.toggle-images {
+		padding-left: 1em;
+		display: block;
+		cursor: pointer;
 	}
 }
 
@@ -167,6 +199,10 @@ input, label {
 			top: -3px;
 			margin-left: -5px;
 
+			&.active {
+				background: green;
+			}
+
 			&:hover {
 				background: red;
 				transform: scale(1.3);
@@ -179,7 +215,7 @@ input, label {
 		margin-top: 20px;
 		font-size: 1.2em;
 
-		.add-keyframe {
+		.add-keyframe, .remove-keyframe {
 			text-transform: uppercase;
 			border: 1px solid white;
 			font-size: 0.5em;
@@ -188,10 +224,15 @@ input, label {
 			top: -3px;
 			margin-left: 20px;
 			cursor: pointer;
+			opacity: 0.5;
 
-			&:hover {
-				border-color: #999;
-				color: #999;
+			&.active {
+				opacity: 1;
+
+				&:hover {
+					border-color: #999;
+					color: #999;
+				}
 			}
 		}
 

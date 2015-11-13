@@ -2,5 +2,7 @@
 
 module.exports = {
 	limit: {},
-	currentTime: 0
+	currentTime: 0,
+	currentKeyframe: undefined,
+	keyframeTimes: []
 };
