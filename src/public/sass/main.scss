@@ -6,12 +6,25 @@
 html, body {
 	height: 100%;
 	background: black;
+	-webkit-user-select: none;
 }
 
 body {
 	font-family: 'Helvetica', 'Arial', 'sans-serif';
 	font-size: 16px;
 	color: white;
+
+	&.playing {
+		.timeline .controls {
+			.ion-play {
+				display: none;
+			}
+
+			.ion-pause {
+				display: inline;
+			}
+		}
+	}
 }
 
 * {
@@ -241,6 +254,10 @@ input, label {
 					color: #999;
 				}
 			}
+		}
+
+		.ion-pause {
+			display: none;
 		}
 
 		.icon {

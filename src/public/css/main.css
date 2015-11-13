@@ -3078,12 +3078,17 @@ table {
 
 html, body {
   height: 100%;
-  background: black; }
+  background: black;
+  -webkit-user-select: none; }
 
 body {
   font-family: 'Helvetica', 'Arial', 'sans-serif';
   font-size: 16px;
   color: white; }
+  body.playing .timeline .controls .ion-play {
+    display: none; }
+  body.playing .timeline .controls .ion-pause {
+    display: inline; }
 
 * {
   box-sizing: border-box; }
@@ -3250,6 +3255,8 @@ input, label {
         .timeline .controls .add-keyframe.active:hover, .timeline .controls .remove-keyframe.active:hover {
           border-color: #999;
           color: #999; }
+    .timeline .controls .ion-pause {
+      display: none; }
     .timeline .controls .icon {
       margin-right: 4px;
       margin-left: 4px; }
