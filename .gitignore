@@ -1,6 +1,7 @@
 # Created by https://www.gitignore.io/api/node,osx
 
 db
+src/public/js/app.js
 
 ### Node ###
 # Logs

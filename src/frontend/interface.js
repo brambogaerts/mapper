@@ -34,12 +34,110 @@ var Interface = module.exports = {
 		});
 
 		$(".image-checkbox").on("click", Interface.imageClicked);
+		$(document).on("mouseup", function(){
+			utils.save();
+		});
 	},
 
 	imageClicked: function(){
-		console.log(this);
+		var clicked = this;
+
+		var image = $("#node" + clicked.dataset.id);
+
+		if(image.length == 0){
+			image = Interface.createNode(clicked.dataset.object, clicked.dataset.number, clicked.dataset.id, .5,.5);
+		}
+
+		if(clicked.checked){
+			image.addClass("active");
+		} else {
+			image.removeClass("active");
+		}
+
+
+		user.objects.forEach(function(object){
+			if(object.number == clicked.dataset.object){
+				object.nodes.forEach(function(node){
+					if(node.id == clicked.dataset.id){
+						var loc = Interface.getNormalizedPosition(image);
+						node.x = loc.x;
+						node.y = loc.y;
+					}
+				});
+			}
+		});
+
+		utils.save();
 	},
 
+	getNormalizedPosition: function(element){
+		return {
+			x: element.position().left / element.parent().width(),
+			y: element.position().top/ element.parent().height()
+		};
+	},
+	createNode: function(object, number, id, x, y){
+		var printLeft = x * 100 + "%";
+		var printTop = y * 100 + "%";
+
+		return $("<div class='node' id='node"+id+"' data-number='"+number+"' data-id='"+id+"' data-object='"+object+"' style='background-image:url(media/"+id+".jpg);left: "+printLeft +";top: "+printTop +";'></div>").appendTo(".canvas").drag(Interface.dragNode);
+	},
+	loadNodes:function(){
+		user.objects.forEach(function(object){
+			object.nodes.forEach(function(node){
+				if(node.x && node.y){
+					Interface.createNode(object.number, node.number, node.id, node.x, node.y);
+				}
+			});
+		});
+	},
+	dragNode:function(event, dd){
+		Interface.moveNode(this, dd.offsetX, dd.offsetY);
+	},
+	moveNode:function(element, _x, _y){
+		var ele = $(element);
+
+		var canvasLeft = ele.parent().offset().left;
+		var canvasTop = ele.parent().offset().top;
+
+		_x -= canvasLeft;
+		_y -= canvasTop;
+
+		if(_x < 0){
+			_x = 0;
+		} else if(_x > ele.parent().width()){
+			_x = ele.parent().width();
+		}
+
+		if(_y < 0){
+			_y = 0;
+		} else if(_y > ele.parent().width()){
+			_y = ele.parent().width();
+		}
+
+		var x = _x / ele.parent().width();
+		var y = _y / ele.parent().height();
+
+		var printLeft = x * 100 + "%";
+		var printTop = y * 100 + "%";
+
+
+		ele.css({
+			left: printLeft,
+			top: printTop
+		});
+
+		user.objects.forEach(function(object){
+			if(object.number == element.dataset.object){
+				object.nodes.forEach(function(node){
+					if(node.id == element.dataset.id){
+						node.x = x;
+						node.y = y;
+					}
+				});
+			}
+		});
+	},
 	addKeyframe: function() {
 		if ($(this).hasClass('active')) {
 			var current = utils.getCurrentKeyframe();
