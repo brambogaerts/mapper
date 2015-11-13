@@ -277,19 +277,15 @@ input, label {
 	}
 }
 
-body.force-show {
-	background: green;
-}
-
 .node {
 	position: absolute;
 	left:50%;
 	top:50%;
-	width: 50px;
-	height: 50px;
+	width: 200px;
+	height: 200px;
 	margin-left: -25px;
 	margin-top:-25px;
-	opacity: .5;
+	opacity: .1;
 	-webkit-transition: opacity 500ms ease;
 	background-size: contain;
 	background-position: center;
@@ -305,4 +301,32 @@ body.force-show {
 	&.force-show {
 		opacity: 1;
 	}
+}
+
+
+body.fullscreen,
+body.force-show {
+	.canvas-holder {
+		width: 100%;
+		height: 100%;
+		border: none;
+		z-index: 10000;
+		background-color: #000;
+		margin: 0;
+		position: absolute;
+		left: 0;
+		top: 0;
+
+		.node {
+			opacity: 0;
+
+			&.force-show, &.active {
+				opacity: 1;
+			}
+		}
+	}
+}
+
+body.force-show .canvas-holder{
+	background-color : #00f;
 }

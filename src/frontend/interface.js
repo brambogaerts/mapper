@@ -9,14 +9,14 @@ var globals = require('./globals');
 var Interface = module.exports = {
 	initEvents: function() {
 		$('.slider')
-			.on('click', function(e) {
-				var l = Math.min(globals.limit.right, Math.max(0, e.offsetX));
-				utils.setTimelineTime(utils.sliderPxToTime(l));
-			})
-			.drag(function( ev, dd ){
-				var l = Math.min(globals.limit.right, Math.max(globals.limit.left, ev.pageX));
-				utils.setTimelineTime(utils.sliderPxToTime(l));
-			});
+		.on('click', function(e) {
+			var l = Math.min(globals.limit.right, Math.max(0, e.offsetX));
+			utils.setTimelineTime(utils.sliderPxToTime(l));
+		})
+		.drag(function( ev, dd ){
+			var l = Math.min(globals.limit.right, Math.max(globals.limit.left, ev.pageX));
+			utils.setTimelineTime(utils.sliderPxToTime(l));
+		});
 
 		$('.slider').on('click', '.keyframe', function(e) {
 			var time = $(this).data('time');
@@ -30,10 +30,19 @@ var Interface = module.exports = {
 		$('.timeline').on('click', '.prev-keyframe', Interface.gotoPrevKeyframe);
 		$('.timeline').on('click', '.ion-play', Interface.play);
 		$(document).on("keyup", function(event){
-			if(event.which == 187){
-				Interface.forceShow(true);
-			} else {
-				Interface.forceShow(false);
+			if(event.which == 83){
+				if($("body").hasClass("force-show")){
+					Interface.forceShow(false);
+				} else {
+					Interface.forceShow(true);
+				}
+			} else if(event.which==70){
+				if($("body").hasClass("fullscreen")){
+					Interface.stop();
+				} else {
+					Interface.enterFullscreen();
+				}
+
 			}
 		});
 		$('.timeline').on('click', '.ion-pause', Interface.stop);
@@ -67,7 +76,15 @@ var Interface = module.exports = {
 	stop: function() {
 		$('body').removeClass('playing');
 		clearInterval(globals.interval);
-
+		Interface.exitFullscreen();
+	},
+	enterFullscreen: function(){
+		$("body").addClass("fullscreen");
+		utils.setTimelineTime(0);
+		Interface.play();
+	},
+	exitFullscreen: function(){
+		$("body").removeClass("fullscreen");
 	},
 
 	imageClicked: function(){
@@ -148,13 +165,10 @@ var Interface = module.exports = {
 		var canvasLeft = ele.parent().offset().left;
 		var canvasTop = ele.parent().offset().top;
 
-		_x -= canvasLeft;
-		_y -= canvasTop;
-
 		if(_x < 0){
 			_x = 0;
-		} else if(_x > ele.parent().width()){
-			_x = ele.parent().width();
+		} else if(_x > ele.parent().width() - ele.width() / 2){
+			_x = ele.parent().width() - ele.width() / 2;
 		}
 
 		if(_y < 0){
