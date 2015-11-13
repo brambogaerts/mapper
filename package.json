@@ -25,7 +25,6 @@
     "gulp-util": "^3.0.7",
     "jquery": "^2.1.4",
     "jquery.event.drag": "^2.2.2",
-    "lodash": "^3.10.1",
     "page": "^1.6.4",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",

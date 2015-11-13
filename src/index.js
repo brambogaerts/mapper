@@ -15,6 +15,5 @@ app.set("views", __dirname + "/app/views");
 
 app.use(express.static(__dirname + "/public"));
 app.use(require("./app/controllers/main"));
-app.use(require("./app/controllers/users"));
 
 app.listen(config.port);

@@ -1,94 +1,270 @@
 var config = require("../../config/config");
-var assert = require("assert");
 var crypto = require("crypto");
 var fs = require("fs");
 
-prepare();
-
 function prepare(){
-	loadData();
-	var data = {};
-
-	setTimeout(function(){
-		console.log(JSON.stringify(data, null, 4));
-	}, 2000);
+	var data = loadData();
+	return data;
 
 	function loadData(){
-		fs.readdir(config.dataPath, function(err, files){
-			assert(err === null, "Error reading data directory");
-			files.forEach(function(filename){
-				prepareGroup(filename, config.dataPath + filename);
+		var promise = new Promise(function(resolve, reject){
+			fs.readdir(config.dataPath, function(err, files){
+				if(err == null){
+					var groups = [];
+
+					files.forEach(function(filename){
+						var group = prepareGroup(filename, config.dataPath + filename);
+
+						groups.push(group);
+					});
+
+					Promise.all(groups).then(function(groups){
+						var data = [];
+
+						groups.forEach(function(group){
+							if(group != undefined){
+								data.push(group);
+							}
+						});
+
+						resolve(data);
+					}, function(err){
+						reject(err);
+					});
+				} else {
+					reject(err);
+				}
 			});
 		});
+
+		return promise;
 	}
 
 	function prepareGroup(group, input){
-		fs.stat(input, function(err, stats){
-			assert(err === null, "Error getting stats for directory: " + input);
-			if(stats.isDirectory()){
-				data[group] = {
-					number: group,
-					users: {}
-				};
+		var promise = new Promise(function(resolve, reject){
+			fs.stat(input, function(err, stats){
+				if(err == null){
+					if(stats.isDirectory()){
+						var _group = {
+							number: group,
+							users: []
+						};
 
-				fs.readdir(input, function(err, files){
-					assert(err === null, "Error reading directory: " + input);
-					files.forEach(function(filename){
-						prepareUser(group, filename, input + "/" + filename);
-					});
-				});
-			}
+						fs.readdir(input, function(err, files){
+							if(err == null){
+								var users = [];
+
+								files.forEach(function(filename){
+									var user = prepareUser(group, filename, input + "/" + filename);
+									users.push(user);
+								});
+
+								Promise.all(users).then(function(users){
+									users.forEach(function(user){
+										if(user != undefined){
+											_group.users.push(user);
+										}
+									});
+
+									resolve(_group);
+								}, function(err){
+									reject(err);
+								});
+							} else {
+								reject(err);
+							}
+						});
+					} else {
+						resolve();
+					}
+				} else {
+					reject(err);
+				}
+			});
 		});
+
+		return promise;
 	}
 
 	function prepareUser(group, user, input){
-		fs.stat(input, function(err, stats){
-			assert(err === null, "Error getting stats for directory: " + input);
-			if(stats.isDirectory()){
-				user = user.replace("_", " ");
-				userid = crypto.createHash("md5").update(user).digest("HEX");
+		var promise = new Promise(function(resolve, reject){
+			fs.stat(input, function(err, stats){
+				if(err == null){
+					if(stats.isDirectory()){
+						user = user.replace("_", " ");
+						var uid = crypto.createHash("md5").update(user).digest("HEX");
 
-				data[group][userid] = {
-					id: userid,
-					name: user,
-					group: group,
-					objects: {},
-					keyframes: []
-				};
+						var _user = {
+							id: uid,
+							name: user,
+							objects: []
+						};
 
-				fs.readdir(input, function(err, files){
-					assert(err === null, "Error reading directory: " + input);
-					files.forEach(function(filename){
-						prepareObject(group, userid, filename, input + "/" + filename);
-					});
-				});
-			}
+						fs.readdir(input, function(err, files){
+							if(err == null){
+								var objects = [];
+
+								files.forEach(function(filename){
+									var object = prepareObject(group, uid, filename, input + "/" + filename);
+
+									objects.push(object);
+								});
+
+								Promise.all(objects).then(function(objects){
+									objects.forEach(function(object){
+										if(object != undefined){
+											_user.objects.push(object);
+										}
+									});
+
+									resolve(_user);
+								}, function(err){
+									reject(err);
+								});
+							} else {
+								reject(err);
+							}
+						});
+					} else {
+						resolve();
+					}
+				} else {
+					reject(err);
+				}
+			});
 		});
+
+		return promise;
 	}
 
-	function prepareObject(group, userid, object, input){
-		fs.stat(input, function(err, stats){
-			assert(err === null, "Error getting stats for directory: " + input);
-			if(stats.isDirectory()){
-				data[group][userid].objects[object] = {
-					number: object
-				};
+	function prepareObject(group, uid, object, input){
+		var promise = new Promise(function(resolve, reject){
+			fs.stat(input, function(err, stats){
+				if(err == null){
+					if(stats.isDirectory()){
+						var _object = {
+							number: object,
+							nodes: []
+						};
 
-				fs.readdir(input, function(err, files){
-					assert(err === null, "Error reading directory: " + input);
-					files.forEach(function(filename){
-						prepareNode(group, userid, object, filename, input + "/" + filename);
-					});
-				});
-			}
+						fs.readdir(input, function(err, files){
+							if(err == null){
+								var nodes = [];
+
+								files.forEach(function(filename){
+									var node = prepareNode(group, uid, object, filename, input + "/" + filename);
+									nodes.push(node);
+								});
+
+								Promise.all(nodes).then(function(nodes){
+									nodes.forEach(function(node){
+										if(node != undefined){
+											_object.nodes.push(node);
+										}
+									});
+
+									resolve(_object);
+								}, function(err){
+									reject(err);
+								});
+							} else {
+								reject(err);
+							}
+						});
+					} else {
+						resolve();
+					}
+				} else {
+					reject(err);
+				}
+			});
 		});
+
+		return promise;
 	}
 
-	function prepareNode(group, userid, object, node, input){
+	function prepareNode(group, uid, object, node, input){
 		node = node.replace(".jpg", "");
+		var nid = crypto.createHash("md5").update(group + uid + object + node).digest("HEX");
+
+		var _node = {
+			number: node,
+			id: nid
+		};
+
+		var promise = new Promise(function(resolve, reject){
+			fs.stat(__dirname + "/../../public/media/" + nid + ".jpg", function(err, stats){
+				if(err != null){
+					fs.createReadStream(input).pipe(fs.createWriteStream(__dirname + "/../../public/media/" + nid + ".jpg"));
+				}
+
+				resolve(_node);
+			});
+		});
+
+		return promise;
 	}
 }
 
-module.exports = {
+var groups = [];
 
+prepare().then(function(_groups){
+	groups = _groups;
+}, function(err){
+	console.log(err);
+});
+
+function findGroups(callback){
+	var response = [];
+
+	groups.forEach(function(group){
+		response.push({
+			"id": group.number
+		});
+	});
+
+	callback(response);
+}
+
+function findGroup(id, callback){
+	var done = false;
+
+	groups.forEach(function(group){
+		if(group.number == id){
+			callback(group);
+			done = true;
+		}
+	});
+
+	if(!done){
+		callback(null);
+	}
+}
+
+function findUser(group, id, callback){
+	findGroup(group, function(group){
+		if(group == null){
+			callback(null);
+		} else {
+			var done = false;
+
+			group.users.forEach(function(user){
+				if(user.id == id){
+					callback(user);
+					done = true;
+				}
+			});
+
+			if(!done){
+				callback(null);
+			}
+		}
+	});
+}
+
+
+module.exports = {
+	findGroups: findGroups,
+	findGroup: findGroup,
+	findUser: findUser
 };
