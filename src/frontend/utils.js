@@ -80,8 +80,10 @@ var Utils = module.exports = {
 					$('.keyframe[data-time="'+k.time+'"]').addClass('active');
 
 					$('input[type="checkbox"]').prop('checked', false);
+					$('.node').removeClass('active');
 					_.each(k.activeNodes, function(n) {
 						$('input[data-id="' + n + '"]').prop('checked', true);
+						$('#node' + n).addClass('active');
 					});
 				}
 			}
