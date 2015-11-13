@@ -36,6 +36,7 @@ var Interface = module.exports = {
 				Interface.forceShow(false);
 			}
 		});
+		$('.timeline').on('click', '.ion-pause', Interface.stop);
 
 		$('.list span.toggle-images').click(function() {
 			$(this).parent().toggleClass('expanded');
@@ -48,13 +49,25 @@ var Interface = module.exports = {
 	},
 
 	play: function() {
+		Interface.forceShow(false);
+
 		globals.interval = setInterval(function() {
+			$('body').addClass('playing');
 			var totalTime = globals.duration;
 			var t = globals.currentTime * totalTime;
 
 			var next = t + 1;
+			if (next >= totalTime) {
+				Interface.stop();
+			}
 			utils.setTimelineTime(next/totalTime);
 		}, 1);
+	},
+
+	stop: function() {
+		$('body').removeClass('playing');
+		clearInterval(globals.interval);
+
 	},
 
 	imageClicked: function(){
