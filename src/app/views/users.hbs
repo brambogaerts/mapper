@@ -1,0 +1,14 @@
+{{> header this}}
+
+<div class="user-selector">
+	<div class="users">
+		<h2>{{group.name}}</h2>
+		{{#each group.students}}
+			<div class="user" data-slug="{{slug}}">
+				{{first_name}} {{last_name}}
+			</div>
+		{{/each}}
+	</div>
+</div>
+
+{{> footer}}

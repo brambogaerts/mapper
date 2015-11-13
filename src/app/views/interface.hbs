@@ -1,0 +1,51 @@
+{{> header this}}
+
+<div class="user-name">
+	<h2>{{user.first_name}} {{user.last_name}}</h2>
+</div>
+
+<div class="interface">
+	<div class="canvas-holder">
+		<div class="canvas"></div>
+	</div>
+
+	<div class="list">
+		<h4>Objecten</h4>
+		<ul>
+		{{#each user.objects}}
+			<li>
+				<input id="obj_{{@index}}" type="checkbox" />
+				<label for="obj_{{@index}}">Object {{@index}}</label>
+
+			<ul>
+				{{#each images}}
+					<li>
+						<input id="img_{{@index}}_{{@../index}}" type="checkbox" />
+						<label for="img_{{@index}}_{{@../index}}">{{fileName}}</label>
+					</li>
+				{{/each}}
+			</ul>
+			</li>
+		{{/each}}
+		</ul>
+	</div>
+
+	<div class="timeline">
+		<div class="slider">
+			<div class="indicator"></div>
+		</div>
+
+		<div class="controls">
+			<i class="icon ion-ios-skipbackward prev-keyframe"></i>
+			<i class="icon ion-play"></i>
+			<i class="icon ion-ios-skipforward next-keyframe"></i>
+			<span class="add-keyframe">
+				<i class="icon ion-plus"></i> keyframe
+			</span>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">var user = {{{json user}}}</script>
+
+{{> footer}}

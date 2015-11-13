@@ -1,12 +1,13 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>{{title}}</title>
-		<link rel="stylesheet" href="css/main.css" charset="utf-8">
-	</head>
-	<body>
-		Up and running!
-		<script src="js/app.js" charset="utf-8"></script>
-	</body>
-</html>
+{{> header this}}
+
+<div class="group-selector">
+	<div class="groups">
+		{{#each groups}}
+			<div class="group" data-id="{{id}}">
+				{{name}}
+			</div>
+		{{/each}}
+	</div>
+</div>
+
+{{> footer}}

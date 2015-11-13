@@ -16,5 +16,22 @@
   "dependencies": {
     "express": "^4.13.3",
     "hbs": "^4.0.0"
+  },
+  "devDependencies": {
+    "browserify": "^12.0.1",
+    "gulp": "^3.9.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-sass": "^2.1.0",
+    "gulp-util": "^3.0.7",
+    "jquery": "^2.1.4",
+    "jquery.event.drag": "^2.2.2",
+    "lodash": "^3.10.1",
+    "page": "^1.6.4",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.6.0"
+  },
+  "browser": {
+    "drag": "./node_modules/jquery.event.drag/jquery.event.drag.js"
   }
 }
