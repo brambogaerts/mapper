@@ -3078,13 +3078,16 @@ table {
 
 html, body {
   height: 100%;
-  background: black;
-  -webkit-user-select: none; }
+  background: black; }
 
 body {
   font-family: 'Helvetica', 'Arial', 'sans-serif';
   font-size: 16px;
-  color: white; }
+  color: white;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none; }
   body.playing .timeline .controls .ion-play {
     display: none; }
   body.playing .timeline .controls .ion-pause {
@@ -3149,7 +3152,8 @@ h4 {
     top: 0;
     bottom: 0;
     left: 0;
-    right: 0; }
+    right: 0;
+    overflow: hidden; }
 
 .interface {
   height: 100%; }
@@ -3263,3 +3267,17 @@ input, label {
       .timeline .controls .icon:hover {
         cursor: pointer;
         color: #999; }
+
+.node {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  background: red;
+  margin-left: -25px;
+  margin-top: -25px;
+  opacity: .5; }
+  .node.active {
+    opacity: 1;
+    z-index: 999; }

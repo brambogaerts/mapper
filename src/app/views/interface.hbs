@@ -13,12 +13,11 @@
 		<h4>Objecten</h4>
 		<ul>
 		{{#each user.objects}}
-			<li class="expanded"><span class="toggle-images"><i class="icon ion-arrow-right-b"></i><i class="icon ion-arrow-down-b"></i>&nbsp;Object {{@index}}</span>
-
+			<li class="expanded"><span class="toggle-images"><i class="icon ion-arrow-right-b"></i><i class="icon ion-arrow-down-b"></i>&nbsp;Object {{number}}</span>
 			<ul>
 				{{#each nodes}}
 					<li>
-						<input class="image-checkbox" id="img_{{id}}" data-id="{{id}}" type="checkbox" />
+						<input class="image-checkbox" id="img_{{id}}" data-number="{{number}}" data-id="{{id}}" type="checkbox" data-object="{{../number}}"/>
 						<label for="img_{{id}}">Afbeelding {{number}}</label>
 					</li>
 				{{/each}}
