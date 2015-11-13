@@ -18,10 +18,6 @@ gulp.task('sass', function () {
 		.pipe(gulp.dest('./src/public/css'));
 });
 
-gulp.task('sass:watch', function () {
-	gulp.watch('./src/public/sass/*.scss', ['sass']);
-});
-
 // add custom browserify options here
 var customOpts = {
 	entries: ['./src/frontend/index.js'],
@@ -33,7 +29,6 @@ var b = watchify(browserify(opts));
 // add transformations here
 // i.e. b.transform(coffeeify);
 
-gulp.task('js', bundle); // so you can run `gulp js` to build the file
 b.on('update', bundle); // on any dep update, runs the bundler
 b.on('log', gutil.log); // output build logs to terminal
 
@@ -50,3 +45,8 @@ function bundle() {
 		//.pipe(sourcemaps.write('./')) // writes .map file
 		.pipe(gulp.dest('./src/public/js/'));
 }
+
+gulp.task('watch', function() {
+	gulp.watch('./src/public/sass/*.scss', ['sass']);
+	bundle();
+});
