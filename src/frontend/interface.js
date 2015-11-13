@@ -32,6 +32,12 @@ var Interface = module.exports = {
 		$('.list span.toggle-images').click(function() {
 			$(this).parent().toggleClass('expanded');
 		});
+
+		$(".image-checkbox").on("click", Interface.imageClicked);
+	},
+
+	imageClicked: function(){
+		console.log(this);
 	},
 
 	addKeyframe: function() {
