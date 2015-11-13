@@ -71,13 +71,15 @@ var Utils = module.exports = {
 
 			if (change) {
 				var k = globals.currentKeyframe;
-				$('.keyframe').removeClass('active');
-				$('.keyframe[data-time="'+k.time+'"]').addClass('active');
+				if (k) {
+					$('.keyframe').removeClass('active');
+					$('.keyframe[data-time="'+k.time+'"]').addClass('active');
 
-				$('input[type="checkbox"]').prop('checked', false);
-				_.each(k.activeNodes, function(n) {
-					$('input[data-id="' + n + '"]').prop('checked', true);
-				});
+					$('input[type="checkbox"]').prop('checked', false);
+					_.each(k.activeNodes, function(n) {
+						$('input[data-id="' + n + '"]').prop('checked', true);
+					});
+				}
 			}
 		}
 	},
@@ -97,6 +99,21 @@ var Utils = module.exports = {
 		}
 	},
 
+	addImageToKeyframe: function(id) {
+		var k = Utils.getCurrentKeyframe();
+		if (k) {
+			k.activeNodes.push(id);
+		}
+	},
+
+	removeImageFromKeyframe: function(id) {
+		var k = Utils.getCurrentKeyframe();
+		if (k) {
+			k.activeNodes = _.without(k.activeNodes, id);
+			console.log(id, k.activeNodes)
+		}
+	},
+
 	getKeyframeTimes: function() {
 		return _.pluck(user.keyframes, 'time').sort();
 	},
@@ -108,11 +125,15 @@ var Utils = module.exports = {
 	getPrevKeyframe: function() {
 		var k = Utils.getCurrentKeyframe();
 
-		var prevIdx = _.indexOf(user.keyframes, k);
-		if (k.time === globals.currentTime) prevIdx--;
+		if (k) {
+			var prevIdx = _.indexOf(user.keyframes, k);
+			if (k.time === globals.currentTime) prevIdx--;
 
-		if (prevIdx >= 0) {
-			return user.keyframes[prevIdx];
+			if (prevIdx >= 0) {
+				return user.keyframes[prevIdx];
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}

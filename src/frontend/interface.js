@@ -38,6 +38,16 @@ var Interface = module.exports = {
 
 	imageClicked: function(){
 		console.log(this);
+
+		var checked = $(this).prop('checked');
+
+		if (checked) {
+			utils.addImageToKeyframe($(this).data('id'));
+		} else {
+			utils.removeImageFromKeyframe($(this).data('id'));
+		}
+
+		utils.save();
 	},
 
 	addKeyframe: function() {
@@ -78,9 +88,14 @@ var Interface = module.exports = {
 				});
 			}
 
-			utils.setTimelineTime(globals.currentTime);
-
 			utils.save();
+
+			var prev = utils.getPrevKeyframe();
+			if (prev === false) {
+				$('input.image-checkbox').prop('checked', false);
+			}
+
+			utils.setTimelineTime(globals.currentTime);
 		}
 	},
 
