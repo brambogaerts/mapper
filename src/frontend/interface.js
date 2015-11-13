@@ -28,12 +28,23 @@ var Interface = module.exports = {
 		$('.timeline').on('click', '.remove-keyframe', Interface.removeKeyframe);
 		$('.timeline').on('click', '.next-keyframe', Interface.gotoNextKeyframe);
 		$('.timeline').on('click', '.prev-keyframe', Interface.gotoPrevKeyframe);
+		$('.timeline').on('click', '.ion-play', Interface.play);
 
 		$('.list span.toggle-images').click(function() {
 			$(this).parent().toggleClass('expanded');
 		});
 
 		$(".image-checkbox").on("click", Interface.imageClicked);
+	},
+
+	play: function() {
+		globals.interval = setInterval(function() {
+			var totalTime = globals.duration;
+			var t = globals.currentTime * totalTime;
+
+			var next = t + 1;
+			utils.setTimelineTime(next/totalTime);
+		}, 1);
 	},
 
 	imageClicked: function(){
