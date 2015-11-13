@@ -1,7 +1,7 @@
-var express  = require("express");
-var hbs      = require("hbs");
-var config   = require("./config/config");
-var fs       = require('fs');
+var express    = require("express");
+var hbs        = require("hbs");
+var bodyParser = require("body-parser");
+var config     = require("./config/config");
 
 var app = express();
 
@@ -13,6 +13,7 @@ hbs.registerHelper('json', function(options) {
 app.set("view engine", "hbs");
 app.set("views", __dirname + "/app/views");
 
+app.use(bodyParser.json());
 app.use(express.static(__dirname + "/public"));
 app.use(require("./app/controllers/main"));
 

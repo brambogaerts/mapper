@@ -32,4 +32,10 @@ Router.get("/groep/:id/:user", function(req, res){
 	});
 });
 
+Router.post("/groep/:id/:user", function(req, res){
+	User.saveUser(req.body, req.params.id, req.params.user, function(result){
+		res.send(result);
+	});
+});
+
 module.exports = Router;

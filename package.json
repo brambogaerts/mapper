@@ -14,6 +14,7 @@
   "license": "ISC",
   "homepage": "https://github.com/brambogaerts/mapper",
   "dependencies": {
+    "body-parser": "^1.14.1",
     "express": "^4.13.3",
     "hbs": "^4.0.0"
   },
