@@ -91,7 +91,7 @@ function prepare(){
 			fs.stat(input, function(err, stats){
 				if(err == null){
 					if(stats.isDirectory()){
-						user = user.replace("_", " ");
+						user = user.split("_").join(" ");
 						var uid = crypto.createHash("md5").update(user).digest("HEX");
 
 						var _user = {
@@ -152,8 +152,10 @@ function prepare(){
 								var nodes = [];
 
 								files.forEach(function(filename){
-									var node = prepareNode(group, uid, object, filename, input + "/" + filename);
-									nodes.push(node);
+									if(filename.charAt(0) != "."){
+										var node = prepareNode(group, uid, object, filename, input + "/" + filename);
+										nodes.push(node);
+									}
 								});
 
 								Promise.all(nodes).then(function(nodes){
@@ -184,7 +186,7 @@ function prepare(){
 	}
 
 	function prepareNode(group, uid, object, node, input){
-		node = node.replace(".jpg", "");
+		node = node.replace(".jpg", "").replace(".JPG", "").replace(".jpeg", "").replace(".JPEG", "");
 		var nid = crypto.createHash("md5").update(group + uid + object + node).digest("HEX");
 
 		var _node = {
@@ -195,7 +197,8 @@ function prepare(){
 		var promise = new Promise(function(resolve, reject){
 			fs.stat(__dirname + "/../../public/media/" + nid + ".jpg", function(err, stats){
 				if(err != null){
-					fs.createReadStream(input).pipe(fs.createWriteStream(__dirname + "/../../public/media/" + nid + ".jpg"));
+					console.log(input);
+					fs.writeFileSync(__dirname + "/../../public/media/" + nid + ".jpg", fs.readFileSync(input));
 				}
 
 				resolve(_node);
@@ -246,26 +249,19 @@ function saveUser(data, group, id, callback){
 	findUser(group, id, function(user){
 		try {
 			var contents = JSON.stringify(data);
-			var underscoreName = user.name.replace(" ", "_");
+			var underscoreName = user.name.split(" ").join("_");
 
 			if(contents.charAt(0) == "{" && contents.charAt(contents.length-1) == "}"){
-				fs.writeFile(config.dataPath + group + "/" + underscoreName + "/" + "data.json", contents, function(err){
-					if(err){
-						callback({
-							status: 400,
-							error: err
-						});
-					} else {
-						callback({
-							status: 200,
-							error: null
-						});
-					}
+				fs.writeFileSync(config.dataPath + group + "/" + underscoreName + "/" + "data.json", contents);
+				callback({
+					status: 200,
+					error: null
 				});
 			}
 		} catch(e){
+			console.log(e);
 			callback({
-				status:200,
+				status: 200,
 				error: e
 			})
 		}
@@ -281,7 +277,7 @@ function findUser(group, id, callback){
 
 			group.users.forEach(function(user){
 				if(user.id == id){
-					var underscoreName = user.name.replace(" ", "_");
+					var underscoreName = user.name.split(" ").join("_");
 
 					fs.readFile(config.dataPath + group.number + "/" + underscoreName + "/" + "data.json", function(err, file){
 						if(err){

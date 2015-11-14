@@ -2,6 +2,7 @@
 
 db
 src/public/js/app.js
+src/public/media
 
 ### Node ###
 # Logs

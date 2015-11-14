@@ -139,13 +139,15 @@ var Interface = module.exports = {
 		return $("<div class='node' id='node"+id+"' data-number='"+number+"' data-id='"+id+"' data-object='"+object+"' style='background-image:url(media/"+id+".jpg);left: "+printLeft +";top: "+printTop +";'></div>").appendTo(".canvas").drag(Interface.dragNode);
 	},
 	loadNodes:function(){
-		user.objects.forEach(function(object){
-			object.nodes.forEach(function(node){
-				if(node.x && node.y){
-					Interface.createNode(object.number, node.number, node.id, node.x, node.y);
-				}
+		if(typeof user != "undefined"){
+			user.objects.forEach(function(object){
+				object.nodes.forEach(function(node){
+					if(node.x && node.y){
+						Interface.createNode(object.number, node.number, node.id, node.x, node.y);
+					}
+				});
 			});
-		});
+		}
 	},
 	forceShow:function(force){
 		if(force){

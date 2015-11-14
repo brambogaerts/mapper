@@ -6,6 +6,6 @@ module.exports = {
 	currentKeyframe: undefined,
 	keyframeTimes: [],
 	//duration: 2 * 60 * 1000,
-	duration: 0.1 * 60 * 1000,
+	duration: 20000,
 	interval: undefined
 };

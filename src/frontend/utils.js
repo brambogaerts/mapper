@@ -16,15 +16,13 @@ var Utils = module.exports = {
 		};
 
 		$.ajax({
-			url: '/groep/1/' + user.id,
+			url: window.location.href,
 			method: 'POST',
 			data: JSON.stringify(data),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			success: function(resp) {
-				if (resp.error) {
-					alert(resp.error);
-				}
+				console.log(resp);
 			}
 		});
 	},
@@ -33,14 +31,14 @@ var Utils = module.exports = {
 		var time = x.map(globals.limit.left, globals.limit.right, 0, 1);
 		return Math.round(time*100)/100;
 	},
-	
+
 	timeToSliderPx: function(time) {
 		return time.map(0, 1, globals.limit.left, globals.limit.right) - 10 //-10 because of screen offset slider, -3 for keyframe dot width
 	},
 
 	setTimelineTime: function(time) {
 		globals.currentTime = time;
-		$('.indicator').css({ 
+		$('.indicator').css({
 			left: Utils.timeToSliderPx(time)
 		});
 
