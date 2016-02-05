@@ -306,6 +306,8 @@ input, label {
 
 body.fullscreen,
 body.force-show {
+	cursor: none;
+	
 	.canvas-holder {
 		width: 100%;
 		height: 100%;
@@ -325,8 +327,4 @@ body.force-show {
 			}
 		}
 	}
-}
-
-body.force-show .canvas-holder{
-	background-color : #00f;
 }
